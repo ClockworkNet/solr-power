@@ -486,6 +486,80 @@ class SolrPower_Sync {
 		}
 	}
 
+
+	/**
+	 * Select all documents in the index.
+	 *
+	 */
+	function select( $post_id ) {
+		try {
+			$solr = get_solr();
+			if ( null !== $solr ) {
+				$query = $solr->createSelect();
+				$filter_str = "{$post_id}";
+				$query->setQuery( $filter_str);
+				// $debug = $query->getDebug();
+				// $debug->setExplainOther('*:*');
+
+				$results = $solr->select( $query );
+				// $debugResult = $results->getDebug();
+			}
+
+			return $results;
+		} catch ( Exception $e ) {
+			$this->error_msg = esc_html( $e->getMessage() );
+
+			return false;
+		}
+
+	}
+
+	/**
+	 * Return Debug explainer for a query string.
+	 *
+	 */
+	function debug( $post_id ) {
+		$solr = get_solr();
+		if ( null !== $solr ) {
+			$query = $solr->createSelect();
+			$filter_str = "{$post_id}";
+			$query->setQuery( $filter_str);
+			$debug = $query->getDebug();
+			$debug->setExplainOther('*:*');
+
+			$results = $solr->select( $query );
+			$debugResult = $results->getDebug();
+		}
+
+
+		return $debugResult;
+
+	}
+
+
+	/**
+	 * Select all documents in the index.
+	 *
+	 */
+	function select_all(  ) {
+		try {
+			$solr = get_solr();
+			if ( null !== $solr ) {
+				$query = $solr->createSelect();
+				$query->setQuery('');
+				$results = $solr->select( $query );
+			}
+
+			return $results;
+		} catch ( Exception $e ) {
+			$this->error_msg = esc_html( $e->getMessage() );
+
+			return false;
+		}
+
+	}
+
+
 	/**
 	 * Load all posts into the index
 	 *
